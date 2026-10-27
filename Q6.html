@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Product Form</title>
+</head>
+<body>
+	<h1>Add a Product</h1>
+	<form id="productForm" novalidate>
+		<p>
+			<label for="productName">Product name:</label>
+			<input id="productName" name="productName" type="text" required>
+		</p>
+		<p>
+			<label for="price">Price:</label>
+			<input id="price" name="price" type="number" min="0.01" step="any" required>
+		</p>
+		<p>
+			<label for="quantity">Quantity:</label>
+			<input id="quantity" name="quantity" type="number" min="0" step="1" required>
+		</p>
+		<button type="submit">Save product</button>
+		<p id="message" role="status" aria-live="polite"></p>
+	</form>
+
+	<script>
+		const form = document.getElementById('productForm');
+		const message = document.getElementById('message');
+
+		form.addEventListener('submit', function (event) {
+			event.preventDefault();
+
+			const name = form.elements.productName.value.trim();
+			const priceValue = form.elements.price.value;
+			const price = Number(priceValue);
+			const quantityValue = form.elements.quantity.value;
+			const quantity = Number(quantityValue);
+
+			if (!name) {
+				message.textContent = 'Product name must not be empty.';
+				form.elements.productName.focus();
+				return;
+			}
+			if (priceValue === '' || !Number.isFinite(price) || price <= 0) {
+				message.textContent = 'Price must be a positive number.';
+				form.elements.price.focus();
+				return;
+			}
+			if (quantityValue === '' || !Number.isInteger(quantity) || quantity < 0) {
+				message.textContent = 'Enter a non-negative whole-number quantity.';
+				form.elements.quantity.focus();
+				return;
+			}
+
+			const product = { name: name, price: price, quantity: quantity };
+			try {
+				const products = JSON.parse(localStorage.getItem('products') || '[]');
+				products.push(product);
+				localStorage.setItem('products', JSON.stringify(products));
+				message.textContent = 'Product saved successfully.';
+				form.reset();
+			} catch (error) {
+				message.textContent = 'Unable to save product in local storage.';
+			}
+		});
+	</script>
+</body>
+</html>

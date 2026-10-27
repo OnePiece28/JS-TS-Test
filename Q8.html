@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpage Theme Switcher</title>
+    <style>
+        :root {
+            --page: #f3f5fa;
+            --card: #ffffff;
+            --text: #202638;
+            --accent: #535bd7;
+        }
+
+        [data-theme="dark"] {
+            --page: #171923;
+            --card: #252938;
+            --text: #f4f5fb;
+            --accent: #858cff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: grid;
+            place-items: center;
+            background: var(--page);
+            color: var(--text);
+            font: 16px/1.5 system-ui, sans-serif;
+            transition: background-color .2s, color .2s;
+        }
+
+        main {
+            width: min(90%, 440px);
+            padding: 2rem;
+            border-radius: 14px;
+            background: var(--card);
+            box-shadow: 0 8px 28px #0002;
+        }
+
+        button {
+            padding: .7rem 1rem;
+            border: 0;
+            border-radius: 7px;
+            background: var(--accent);
+            color: white;
+            font: inherit;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Theme switcher</h1>
+        <button id="themeButton" type="button" aria-pressed="false">Switch to dark theme</button>
+    </main>
+    <script>
+        const themeButton = document.querySelector('#themeButton');
+
+        themeButton.addEventListener('click', () => {
+            const darkMode = document.documentElement.dataset.theme !== 'dark';
+            document.documentElement.dataset.theme = darkMode ? 'dark' : 'light';
+            themeButton.textContent = `Switch to ${darkMode ? 'light' : 'dark'} theme`;
+            themeButton.setAttribute('aria-pressed', String(darkMode));
+        });
+    </script>
+</body>
+
+</html>

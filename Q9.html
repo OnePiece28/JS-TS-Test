@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Show or Hide Password</title>
+</head>
+<body>
+	<h1>Password Visibility Example</h1>
+
+	<label for="password">Password:</label>
+	<input id="password" type="password" placeholder="Enter your password">
+	<button id="togglePassword" type="button" aria-pressed="false">Show password</button>
+
+	<script>
+		const password = document.getElementById("password");
+		const toggle = document.getElementById("togglePassword");
+
+		toggle.addEventListener("click", () => {
+			const shouldShow = password.type === "password";
+			password.type = shouldShow ? "text" : "password";
+			toggle.textContent = shouldShow ? "Hide password" : "Show password";
+			toggle.setAttribute("aria-pressed", String(shouldShow));
+		});
+	</script>
+</body>
+</html>

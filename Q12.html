@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Coupon Checkout</title>
+</head>
+<body>
+	<h1>Checkout</h1>
+	<p>Enter a coupon code (valid example: <strong>SAVE10</strong>).</p>
+	<form id="checkout-form">
+		<label for="coupon">Coupon code:</label>
+		<input id="coupon" type="text" autocomplete="off">
+		<button type="submit">Apply coupon</button>
+	</form>
+	<p id="result" role="status" aria-live="polite"></p>
+
+	<script>
+		// A user-defined exception for coupon codes not accepted at checkout.
+		class InvalidCouponCode extends Error {
+			constructor(code) {
+				super(`Invalid coupon code: ${code || "(empty)"}`);
+				this.name = "InvalidCouponCode";
+			}
+		}
+
+		const validCoupons = ["SAVE10"];
+		const form = document.getElementById("checkout-form");
+		const result = document.getElementById("result");
+
+		form.addEventListener("submit", (event) => {
+			event.preventDefault();
+			const code = document.getElementById("coupon").value.trim().toUpperCase();
+
+			try {
+				if (!validCoupons.includes(code)) {
+					throw new InvalidCouponCode(code);
+				}
+				result.textContent = "Coupon applied successfully. You saved 10%.";
+				result.style.color = "green";
+			} catch (error) {
+				if (error instanceof InvalidCouponCode) {
+					result.textContent = `${error.name}: ${error.message}`;
+				} else {
+					result.textContent = "An unexpected error occurred.";
+				}
+				result.style.color = "red";
+			}
+		});
+	</script>
+</body>
+</html>
